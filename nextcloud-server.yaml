@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-server
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod-label: nextcloud-server-pod
+  template:
+    metadata:
+      labels:
+        pod-label: nextcloud-server-pod
+    spec:
+      containers:
+      - name: nextcloud
+        image: sirtedious/nextcloud-fix:latest #Add your own image if you'd like
+        volumeMounts:
+        - name: server-storage
+          mountPath: /var/www/html
+          subPath: server-data
+      volumes:
+      - name: server-storage
+        persistentVolumeClaim:
+          claimName: nextcloud-storage-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-server
+  labels:
+    app: nextcloud
+spec:
+  selector:
+    pod-label: nextcloud-server-pod
+  ports:
+  - protocol: TCP
+    port: 8080
+    name: 8080-tcp
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nextcloud-server
+spec:
+  host: your-desired-path-goes-here.com
+  to:
+    kind: Service
+    name: nextcloud-server
+    weight: 100
+  port:
+    targetPort: 8080-tcp
