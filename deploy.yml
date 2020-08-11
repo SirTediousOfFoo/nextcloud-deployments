@@ -1,12 +1,17 @@
 ---
-- name: Testiranje svega prije pravog runa
+- name: k8s test
   hosts: localhost
   connection: local
   vars_files:
     - cr_list
   tasks:
-  - name: Probni output
-    debug:
-      msg: "{{ api_key  }} {{ item.path }}"
-    loop: "{{ paths }}"
+    - name: Deploy custom resource
+      k8s:
+        host: "{{ api_path }}"
+        api_key: "{{ api_key }}"
+        namespace: "{{ project_name }}"
+        src: "{{ item.path }}"
+        validate_certs: no
+      loop: "{{ paths }}"
 ...
+   
