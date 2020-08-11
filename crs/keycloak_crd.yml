@@ -58,6 +58,12 @@ spec:
                   value: admin
                 - name: KEYCLOAK_PASSWORD
                   value: admin 
+                - name: DB_VENDOR
+                  value: H2
+                - name: JGROUPS_DISCOVERY_PROTOCOL
+                  value: dns.DNS_PING
+                - name: JGROUPS_DISCOVERY_PROPERTIES
+                  value: dns_query=keycloak.keycloak.svc.cluster.local 
               securityContext:
                 privileged: false
               ports:
