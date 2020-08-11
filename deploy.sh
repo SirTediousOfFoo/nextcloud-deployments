@@ -71,6 +71,9 @@ echo paths: >> cr_list
 for file in crs/*.yml; do
 	$(echo " - path: $(realpath $file)" >> cr_list)
 done
+for file in crs/*.yaml; do
+        $(echo " - path: $(realpath $file)" >> cr_list)
+done
 
 #Everything is done, we can run the playbook
 ansible-playbook deploy.yml
