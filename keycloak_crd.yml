@@ -1,0 +1,108 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+    name: keycloak
+    labels:
+      application: keycloak
+spec:
+    strategy:
+        type: Recreate
+        recreateParams:
+          timeoutSeconds: 600
+        resources: {}
+        activeDeadlineSeconds: 21600
+    triggers:
+        - type: ConfigChange
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+        deploymentConfig: keycloak
+    template:
+        metadata:
+          name: keycloak
+          labels:
+            application: keycloak
+            deploymentConfig: keycloak
+        spec:
+          volumes:
+            - name: nextcloud-storage-claim
+              persistentVolumeClaim:
+                claimName: nextcloud-storage-claim
+          containers:
+            - resources: {}
+              readinessProbe:
+                httpGet:
+                  path: /auth/realms/master
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 30
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 10
+              terminationMessagePath: /dev/termination-log
+              name: keycloak
+              livenessProbe:
+                httpGet:
+                  path: /auth/realms/master
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 60
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              env:
+                - name: KEYCLOAK_USER
+                  value: admin
+                - name: KEYCLOAK_PASSWORD
+                  value: admin 
+              securityContext:
+                privileged: false
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+                - name: https
+                  containerPort: 8443
+                  protocol: TCP
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+                - name: nextcloud-storage-claim
+                  mountPath: /opt/jboss/keycloak/standalone/data
+              terminationMessagePolicy: File
+              image: 'quay.io/keycloak/keycloak:11.0.0'
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: keycloak
+  labels:
+    application: nextcloud
+spec:
+  ports:
+   - protocol: TCP
+     port: 8443
+     targetPort: 8443
+  selector:
+    deploymentConfig: keycloak
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: keycloak
+  labels:
+    application: nextcloud
+spec:
+  host: keycloak-test.apps.dos-cloud.lan.croz.net
+  to:
+    kind: Service
+    name: keycloak
+    weight: 100
+  tls:
+    termination: passthrough
