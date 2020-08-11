@@ -1,0 +1,12 @@
+---
+- name: Testiranje svega prije pravog runa
+  hosts: localhost
+  connection: local
+  vars_files:
+    - cr_list
+  tasks:
+  - name: Probni output
+    debug:
+      msg: "{{ api_key  }} {{ item.path }}"
+    loop: "{{ paths }}"
+...
