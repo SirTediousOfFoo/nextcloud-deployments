@@ -5,10 +5,20 @@
   vars_files:
     - cr_list
   tasks:
-    - name: Deploy custom resource
+    - name: Create new project if there isn't one there already
       k8s:
+        name: "{{ project_name }}"
+        kind: Namespace
+        api_version: v1
+        state: present
         host: "{{ api_path }}"
-        api_key: "{{ api_key }}"
+        api_key: "{{ token }}"
+        validate_certs: no
+    - name: Deploy or update custom resources
+      k8s:
+        apply: yes
+        host: "{{ api_path }}"
+        api_key: "{{ token }}" 
         namespace: "{{ project_name }}"
         src: "{{ item.path }}"
         validate_certs: no

@@ -45,7 +45,7 @@ apiVersion: route.openshift.io/v1
 metadata:
   name: nextcloud-server
 spec:
-  host: your-desired-path-goes-here.com
+  host: probni-deploy.apps.dos-cloud.lan.croz.net 
   to:
     kind: Service
     name: nextcloud-server
