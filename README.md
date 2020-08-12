@@ -7,6 +7,7 @@ Simply clone this repository to your machine and run `deploy.sh`.
 To use the `deploy.sh` script make sure you give it execution permissions as necessary on your system.
 
 Usage:
+
         -n --namespace    Define the namespace/project you're deploying to
         -s --server       Define the path to the OS API
         -t --token        Define the access token for the API
