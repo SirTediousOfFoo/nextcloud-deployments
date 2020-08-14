@@ -14,7 +14,7 @@ Usage:
         -f --fast         Use previously defined arguments, best if doing a quick update
                           for a resource or something along those lines
         -p --pull         Pull from base git repo(the one hosting this script), acts the
-                          same as -f after pulling
+                          same as -f after pulling if no other params specified
         -P --Pull         Pull from a specified public git repo, acts like -p
 
 Examples:
@@ -30,8 +30,6 @@ Server and token values can be copied and pasted straight from the Copy Login Co
 
 Script needs to be run with at least one argument. 
 
-Namespace is created if it doesn't exist and doesn't change if it's there already. 
+Namespace needs to be created on OpenShift prior to deployment as this was the simplest way to get around the need for different permissions. If you are logged in as a user that has admin priviledges on at least one project/namespace you can use this to deploy to that project.
 
 All CRs found in the /crs/ folder are treated like you're running `oc apply -f` so the script can be used to update resources as well by using the `-f | --fast` switch.
-
-User running the script should have the cluster-admin role because project creation otherwise fails. Workaround is removing the first task from the deploy.yml playbook and creating the project manually.
