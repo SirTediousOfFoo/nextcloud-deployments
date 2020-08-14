@@ -13,8 +13,18 @@ Usage:
         -t --token        Define the access token for the API
         -f --fast         Use previously defined arguments, best if doing a quick update
                           for a resource or something along those lines
+        -p --pull         Pull from base git repo(the one hosting this script), acts the
+                          same as -f after pulling
+        -P --Pull         Pull from a specified public git repo, acts like -p
 
-Namespace, server and token should __all be passed to the script__ or else it won't work.
+Examples:
+```
+./deploy.sh -p -> Update everything and deploy using last defined parameters, acts the same as -f after pulling
+./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name and access details to allow connecting 
+                                                               to your cluster. Run this first to set your environtment.
+```
+
+Server and token and namespace __have to be passed to the script at least once__ or else it won't work. Keep in mind access tokens do time out after a while so you may need to set this from time to time.
 Server and token values can be copied and pasted straight from the Copy Login Command page on OS
 
 Script needs to be run with at least one argument. 
