@@ -11,6 +11,7 @@ Usage:
         -n --namespace    Define the namespace/project you're deploying to
         -s --server       Define the path to the OS API
         -t --token        Define the access token for the API
+        -c --crs          Point to some othe folder containing CRs, should be full path, not ending in "/"
         -f --fast         Use previously defined arguments, best if doing a quick update
                           for a resource or something along those lines
         -p --pull         Pull from base git repo(the one hosting this script), acts the
@@ -20,10 +21,14 @@ Usage:
 Examples:
 ```
 ./deploy.sh -p -> Update everything and deploy using last defined parameters, acts the same as -f after pulling
+
 ./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name and access details to allow connecting 
                                                                to your cluster. Run this first to set your environment.
-./deploy.sh --Pull=https://github.com/SomeoneElse/some-repo --namespace=my-project
-./deploy.sh -c=/home/pimilosevic/nextcloud-deployments/crs -n=petar-projekt --token=t0k3n --server=https://my-server.com:4843
+                                                               
+./deploy.sh --Pull=https://github.com/SomeoneElse/some-repo --namespace=my-project -> pull stuff from somewhere else
+
+./deploy.sh --crs=/home/sirtedious/resource_folder -n=petar-projekt --token=t0k3n --server=https://my-server.com:4843
+                -> use /home/sirtedious/resource_folder as folder to read CRs from instead of the default one
 
 ```
 
