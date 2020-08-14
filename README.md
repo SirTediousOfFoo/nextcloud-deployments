@@ -20,16 +20,17 @@ Usage:
 
 Examples:
 ```
-./deploy.sh -p -> Update everything and deploy using last defined parameters, acts the same as -f after pulling
+Update everything and deploy using last defined parameters, acts the same as -f after pulling:
+./deploy.sh -p
 
-./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name and access details to allow connecting 
-                                                               to your cluster. Run this first to set your environment.
-                                                               
-./deploy.sh --Pull=https://github.com/SomeoneElse/some-repo --namespace=my-project -> pull stuff from somewhere else
+Set project name and access details to allow connecting to your cluster. Run this first to set your environment:
+./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n
 
+Pull stuff from somewhere else:
+./deploy.sh --Pull=https://github.com/SomeoneElse/some-repo --namespace=my-project
+
+Use /home/sirtedious/resource_folder as folder to read CRs from instead of the default one:
 ./deploy.sh --crs=/home/sirtedious/resource_folder -n=petar-projekt --token=t0k3n --server=https://my-server.com:4843
-                -> use /home/sirtedious/resource_folder as folder to read CRs from instead of the default one
-
 ```
 
 Server and token and namespace __have to be passed to the script at least once__ or else it won't work. Keep in mind access tokens do time out after a while so you may need to set this from time to time.
