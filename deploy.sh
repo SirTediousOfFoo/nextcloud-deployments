@@ -14,11 +14,11 @@ case $i in
     shift # past argument=value
     ;;
     -s=*|--server=*)
-    HOST="${i#*=}"
+    export K8S_AUTH_HOST="${i#*=}"
     shift # past argument=value
     ;;
     -t=*|--token=*)
-    TOKEN="${i#*=}"
+    export K8S_AUTH_API_KEY="${i#*=}"
     shift # past argument=value
     ;;
     -h|--help)
@@ -28,13 +28,31 @@ Usage:
 	-n --namespace    Define the namespace/project you're deploying to
 	-s --server 	  Define the path to the OS API
 	-t --token 	  Define the access token for the API
-        -f --fast         Use previously defined arguments, best if doing a quick update
-			  for a resource or something along those lines
-Server and token values can be copied straight from the Copy Login Command page on OS"
+        -f --fast         Use previously defined arguments, best if doing a 
+			  quick update for a resource or something along those
+			   lines
+	-p --pull	  Pull from base git repo(the one hosting this script)
+	-P --Pull	  Pull from a specified public git repo
+
+Server and token values can be copied straight from the Copy Login Command page
+on OpenShift. 
+
+Examples:
+./deploy.sh -p -f -> Update everything and deploy using last defined parameters
+./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name
+	and access details to allow connecting to your cluster. Run this first."
     shift
     ;;
     -f|--fast)
     FAST=1
+    shift
+    ;;
+    -p|--pull)
+    git pull https://github.com/SirTediousOfFoo/nextcloud-deployments.git
+    shift
+    ;;
+    -P|--Pull)
+    git pull "${i#*=}"
     shift
     ;;
     *)
@@ -63,14 +81,6 @@ rm cr_list
 if [ ${NAMESPACE:+1} ]
 then
 	echo project_name: $NAMESPACE >> cr_list
-fi
-if [ ${HOST:+1} ]
-then
-	echo api_path: $HOST >> cr_list
-fi
-if [ ${TOKEN:+1} ]
-then
-	echo token: $TOKEN >> cr_list
 fi
 
 #Get all the CR files we have
