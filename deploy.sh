@@ -5,10 +5,15 @@ if [[ $# -lt 1 ]]; then
 	echo "This script needs at least one argument to run, please run deploy.sh -h|--help to see the help screen for more information on usage."
 	exit 2
 fi
+FOLDER=crs
 #Run over all command line arguments passed to the script
 for i in "$@"
 do
 case $i in
+    -c=*|--crs=*)
+    FOLDER="${i#*=}"
+    shift
+    ;;
     -n=*|--namespace=*)
     export NAMESPACE="${i#*=}"
     shift # past argument=value
@@ -53,7 +58,7 @@ Examples:
     git pull https://github.com/SirTediousOfFoo/nextcloud-deployments.git
     shift
     ;;
-    -P|--Pull)
+    -P=*|--Pull=*)
     git pull "${i#*=}"
     shift
     ;;
@@ -87,10 +92,10 @@ fi
 
 #Get all the CR files we have
 echo paths: >> cr_list
-for file in crs/*.yml; do
+for file in $FOLDER/*.yml; do
 	$(echo " - path: $(realpath $file)" >> cr_list)
 done
-for file in crs/*.yaml; do
+for file in $FOLDER/*.yaml; do
         $(echo " - path: $(realpath $file)" >> cr_list)
 done
 
