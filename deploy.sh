@@ -33,9 +33,11 @@ Usage:
 	-n --namespace    Define the namespace/project you're deploying to
 	-s --server 	  Define the path to the OS API
 	-t --token 	  Define the access token for the API
+	-c --crs          Point to some othe folder containing CRs, should be
+			  full path, not ending in "/"
         -f --fast         Use previously defined arguments, best if doing a 
 			  quick update for a resource or something along those
-			   lines
+			  lines
 	-p --pull	  Pull from base git repo(the one hosting this script)
 			  and deploy with previous parameters
 	-P --Pull	  Pull from a specified public git repo, acts like -p
