@@ -21,7 +21,8 @@ Examples:
 ```
 ./deploy.sh -p -> Update everything and deploy using last defined parameters, acts the same as -f after pulling
 ./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name and access details to allow connecting 
-                                                               to your cluster. Run this first to set your environtment.
+                                                               to your cluster. Run this first to set your environment.
+./deploy.sh --Pull=https://github.com/SomeoneElse/some-repo --namespace=my-project
 ```
 
 Server and token and namespace __have to be passed to the script at least once__ or else it won't work. Keep in mind access tokens do time out after a while so you may need to set this from time to time.
