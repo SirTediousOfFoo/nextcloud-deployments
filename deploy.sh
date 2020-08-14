@@ -10,7 +10,7 @@ for i in "$@"
 do
 case $i in
     -n=*|--namespace=*)
-    NAMESPACE="${i#*=}"
+    export NAMESPACE="${i#*=}"
     shift # past argument=value
     ;;
     -s=*|--server=*)
@@ -32,13 +32,15 @@ Usage:
 			  quick update for a resource or something along those
 			   lines
 	-p --pull	  Pull from base git repo(the one hosting this script)
-	-P --Pull	  Pull from a specified public git repo
+			  and deploy with previous parameters
+	-P --Pull	  Pull from a specified public git repo, acts like -p
 
 Server and token values can be copied straight from the Copy Login Command page
 on OpenShift. 
 
 Examples:
-./deploy.sh -p -f -> Update everything and deploy using last defined parameters
+./deploy.sh -p -> Update everything and deploy using last defined parameters,
+	acts the same as -f after pulling
 ./deploy.sh -n=my-project -s=api.myserver.com:3342 -t=t0k3n -> set project name
 	and access details to allow connecting to your cluster. Run this first."
     shift
