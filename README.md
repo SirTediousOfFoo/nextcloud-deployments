@@ -5,6 +5,7 @@ OpenShift resource files for the deployment of Nextcloud and necessary services 
 
 Simply clone this repository to your machine and run `deploy.sh`.
 To use the `deploy.sh` script make sure you give it execution permissions as necessary on your system.
+Database secret should be additionaly created to suit your needs if using the CRs found here!
 
 Usage:
 
