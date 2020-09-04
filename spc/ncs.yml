@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-server-1
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod-label: nextcloud-server-1-pod
+  template:
+    metadata:
+      labels:
+        pod-label: nextcloud-server-1-pod
+    spec:
+      containers:
+      - name: nextcloud
+        image: sirtedious/nextcloud-https:latest #Add your own image if you'd like
+        volumeMounts:
+        - name: server-storage
+          mountPath: /var/www/html
+          subPath: server-data
+      volumes:
+      - name: server-storage
+        persistentVolumeClaim:
+          claimName: nextcloud-storage-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-server-1
+  labels:
+    app: nextcloud
+spec:
+  selector:
+    pod-label: nextcloud-server-1-pod
+  ports:
+  - protocol: TCP
+    port: 443
+    targetPort: 8443
+    name: 8443-tcp
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nextcloud-server-1
+spec:
+  host: beta-cloud.apps.dos-cloud.lan.croz.net 
+  to:
+    kind: Service
+    name: nextcloud-server-1
+    weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  port:
+    targetPort: 8443-tcp
